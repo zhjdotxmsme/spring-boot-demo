@@ -1,0 +1,37 @@
+spring:
+  profiles:
+    active: prod
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/auth
+    username: root
+    password: 123456
+  output:
+    ansi:
+     enabled:always
+  http:
+    encoding:
+      charset: utf-8
+      force: true
+      enabled: true
+logging:
+  file: "logs/spring-boot.log"
+server:
+  port: 10252
+
+info:
+  contact:
+    email: zhjames17@foxmail.com
+    phone:  "nice to meet you, nophone"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+
