@@ -4,7 +4,8 @@ import com.example.demo.dao.UserDao;
 import com.example.demo.entity.QUser;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 /**
  * @author hongjin.zhu
@@ -34,21 +36,29 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @PersistenceContext
-    private
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     private String name;
 
     @Override
+    @Transactional
     public Page<User> search(final String searchInfo, final Integer pageNo, final Integer pageSize) {
 
         // todo 分页没有去做处理，使用的默认分页
         PageRequest pageRequest = PageRequest.of(1, 10);
 
+        /**
+         * 查询的时候用的是 JPAQuery
+         * 删除/更新用的是 JPAQueryFactory
+         */
         QUser user = QUser.user;
-        JPAQuery<User> query = new JPAQuery<>(entityManager);
-        User resutl = query.select(user).from(user).where(user.username.eq("zhang")).fetchOne();
-        System.out.println(" === " + resutl.getPassword());
+//        JPAQuery<User> query = new JPAQuery<>(entityManager);
+//        User resutl = query.select(user).from(user).where(user.username.eq("zhang")).fetchOne();
+//        System.out.println(" === " + resutl.getPassword());
+        Session session = entityManager.unwrap(Session.class);
+        JPAQueryFactory queryFactory = new JPAQueryFactory(session);
+        queryFactory.update(user).where(user.username.eq("zhang")).set(user.username,"li")
+                .set(user.password,"456").execute();
 
         System.out.println(" ==== " + name);
 
