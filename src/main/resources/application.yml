@@ -3,7 +3,7 @@ spring:
     active: prod
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/auth
+    url: jdbc:mysql://127.0.0.1:3306/shiro?useSSL=false
     username: root
     password: 123456
   output:
@@ -14,6 +14,14 @@ spring:
       charset: utf-8
       force: true
       enabled: true
+  thymeleaf:
+    cache: false    #该配置在开发的时候关掉，在实际环境中开取，提高渲染的效率
+    prefix: classpath:/templates
+    suffix: .html
+    encoding: utf-8
+    servlet.content-type: text/html
+    mode: HTML5
+
 logging:
   file: "logs/spring-boot.log"
 server:
@@ -23,6 +31,9 @@ info:
   contact:
     email: zhjames17@foxmail.com
     phone:  "nice to meet you, nophone"
+
+prop:
+  name: zhuhj
 
 management:
   endpoints:
