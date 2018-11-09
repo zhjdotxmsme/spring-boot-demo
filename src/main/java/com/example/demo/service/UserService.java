@@ -3,6 +3,8 @@ package com.example.demo.service;
 import com.example.demo.entity.User;
 import org.springframework.data.domain.Page;
 
+import java.util.Set;
+
 /**
  * @author hongjin.zhu
  * @description
@@ -12,6 +14,19 @@ import org.springframework.data.domain.Page;
 
 public interface UserService {
 
+    User createUser(User user);
+
+    void changePasswword(Long userId, String newPassword);
+
+    void correlationRoles(Long userId,Long... roleIds);
+
+    void uncorrelationRoles(Long userId,Long... roleIds);
+
+    User findByUsername(String username);
+
+    Set<String> findRoles(String username);
+
+    Set<String> findPermissions(String username);
 
     Page<User> search(String searchInfo, Integer pageNo, Integer pageSize);
 }

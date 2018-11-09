@@ -21,6 +21,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.util.Set;
 
 /**
  * @author hongjin.zhu
@@ -39,6 +40,41 @@ public class UserServiceImpl implements UserService {
     private EntityManager entityManager;
 
     private String name;
+
+    @Override
+    public User createUser(User user) {
+        return null;
+    }
+
+    @Override
+    public void changePasswword(Long userId, String newPassword) {
+
+    }
+
+    @Override
+    public void correlationRoles(Long userId, Long... roleIds) {
+
+    }
+
+    @Override
+    public void uncorrelationRoles(Long userId, Long... roleIds) {
+
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return null;
+    }
+
+    @Override
+    public Set<String> findRoles(String username) {
+        return null;
+    }
+
+    @Override
+    public Set<String> findPermissions(String username) {
+        return null;
+    }
 
     @Override
     @Transactional

@@ -21,6 +21,10 @@ spring:
     encoding: utf-8
     servlet.content-type: text/html
     mode: HTML5
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 logging:
   file: "logs/spring-boot.log"
