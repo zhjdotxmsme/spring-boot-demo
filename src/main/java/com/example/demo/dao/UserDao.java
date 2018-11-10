@@ -17,7 +17,8 @@ import java.util.Optional;
  */
 @Repository
 @SuppressWarnings("unchecked")
-public interface UserDao extends JpaRepository<User, Long>,CrudRepository<User,Long>, JpaSpecificationExecutor<User>,QuerydslPredicateExecutor<User> {
+public interface UserDao
+        extends JpaRepository<User, Long>,CrudRepository<User,Long>, JpaSpecificationExecutor<User>,QuerydslPredicateExecutor<User>{
 
     /**
      * 根据用户名查询用户
@@ -27,7 +28,8 @@ public interface UserDao extends JpaRepository<User, Long>,CrudRepository<User,L
      */
     Optional<User> findByUsername(String username);
 
-    /**
+
+/**
      * save entity
      *
      * @param user 用户实体
