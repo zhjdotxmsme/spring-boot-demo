@@ -6,6 +6,8 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,13 +18,12 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "users")
-@DynamicUpdate
-@DynamicInsert
 @Data
 public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long userId;
 
     @NotBlank(message = "name 不能为空！！！！！！！！！！！")
@@ -32,10 +33,9 @@ public class User{
 
     private String passwordSalt;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = Role.class)
     @JoinTable(name = "user_role",
-                    joinColumns = {@JoinColumn(name = "user_id")},
-                    inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    @OrderBy("user_id desc")
-    private Set<Role> roles;
+                    joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"),
+                    inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 }

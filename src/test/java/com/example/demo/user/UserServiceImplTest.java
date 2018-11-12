@@ -49,9 +49,9 @@ public class UserServiceImplTest extends DemoApplicationTests {
         QUser user = new QUser("user");
         Session session = entityManager.unwrap(Session.class);
         JPAQueryFactory queryFactory = new JPAQueryFactory(session);
-        User user1 = queryFactory.select(user).from(user).where(user.id.eq(1L)).fetchFirst();
+        User user1 = queryFactory.select(user).from(user).where(user.userId.eq(1L)).fetchFirst();
         user1.setUsername(null);
-        queryFactory.update(user).where(user.id.eq(1L)).set(user.username,"").execute();
+        queryFactory.update(user).where(user.userId.eq(1L)).set(user.username,"").execute();
 
         helloController.viewHome();
     }

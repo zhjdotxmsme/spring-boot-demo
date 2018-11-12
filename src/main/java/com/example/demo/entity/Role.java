@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -17,15 +19,21 @@ import java.util.Set;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
     private Long roleId;
-    private String name;
+    private String roleName;
+    private String remark;
+    private Long createUserId;
+    private Timestamp createTime;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    @ManyToMany(targetEntity = User.class)
+    @JoinTable(name = "user_role",joinColumns = @JoinColumn(name = "role_id",referencedColumnName = "role_id"),
+                        inverseJoinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"))
+    private Set<User> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = Permission.class)
     @JoinTable(name = "role_permission",
-            joinColumns = {@JoinColumn(name = "roleId")},
-            inverseJoinColumns = {@JoinColumn(name = "permissionId")})
-    private Set<Permission> permissions;
+            joinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "role_id")},
+            inverseJoinColumns = {@JoinColumn(name = "permission_id",referencedColumnName = "permission_id")})
+    private Set<Permission> permissions = new HashSet<>();
 }

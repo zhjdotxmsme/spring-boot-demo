@@ -34,10 +34,10 @@ public class MyRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
         for (Role role : user.getRoles()) {
-            info.addRole(role.getName());
-            for (Permission permission : role.getPermissions()) {
-                info.addStringPermission(permission.getPermission());
-            }
+            info.addRole(role.getRoleName());
+//            for (Permission permission : role.getPermissions()) {
+//                info.addStringPermission(permission.getPermission());
+//            }
         }
         return info;
     }
