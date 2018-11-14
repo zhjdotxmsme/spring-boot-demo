@@ -3,8 +3,9 @@ package com.example.demo.view;
 import com.example.demo.entity.UserValidator;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,15 +20,19 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/api")
 public class HelloController {
+
+    private final static Logger LOG = LoggerFactory.getLogger(HelloController.class);
+
     @InitBinder
     protected void initBinder(WebDataBinder binder){
         binder.addValidators(new UserValidator());
     }
 
     @GetMapping(value = "/home")
-    @RequiresRoles("admin")
+//    @RequiresRoles("admin")
     public String viewHome(){
         System.out.println(" === ");
+        LOG.info("this is logger image");
         return "hello Spring security";
     }
 
