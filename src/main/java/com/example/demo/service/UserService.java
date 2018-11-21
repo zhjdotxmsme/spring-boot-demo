@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.User;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,6 +16,10 @@ import java.util.Set;
 public interface UserService {
 
     User createUser(User user);
+
+    Boolean login(String username,String password);
+
+    void batchRegistryUser(List<User> users);
 
     void changePasswword(Long userId, String newPassword);
 

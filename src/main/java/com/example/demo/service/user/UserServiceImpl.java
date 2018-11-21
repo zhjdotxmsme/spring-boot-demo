@@ -5,6 +5,12 @@ import com.example.demo.entity.QUser;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -21,6 +27,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -42,13 +50,50 @@ public class UserServiceImpl implements UserService {
     private String name;
 
     @Override
-    public User createUser(User user) {
-        return null;
+    public User createUser(User u) {
+        //todo 入参的校验
+
+        User user;
+        user = userDao.save(u);
+        return user;
+    }
+
+    @Override
+    public Boolean login(final String username, final String password) {
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            subject.login(token);
+        } catch (IncorrectCredentialsException | UnknownAccountException | ExcessiveAttemptsException e) {
+            // 捕获密码错误异常
+            if (e instanceof IncorrectCredentialsException) {
+                System.out.println("密码错误!");
+            } else if (e instanceof UnknownAccountException) {
+                System.out.println("用户名错误");
+            } else if (e instanceof ExcessiveAttemptsException) {
+                System.out.println("密码输入次数错误过多");
+            } else {
+                System.out.println("用户名错误");
+            }
+            return false;
+        }
+        User user = userDao.findByUsername(username).get();
+        subject.getSession().setAttribute("user", user);
+        return true;
+    }
+
+    @Override
+    public void batchRegistryUser(List<User> users) {
+        userDao.saveAll(users);
     }
 
     @Override
     public void changePasswword(Long userId, String newPassword) {
-
+        Optional<User> userOptional = userDao.findById(userId);
+        userOptional.ifPresent(user -> {
+            user.setPassword(newPassword);
+            userDao.save(user);
+        });
     }
 
     @Override
@@ -93,8 +138,8 @@ public class UserServiceImpl implements UserService {
 //        System.out.println(" === " + resutl.getPassword());
         Session session = entityManager.unwrap(Session.class);
         JPAQueryFactory queryFactory = new JPAQueryFactory(session);
-        queryFactory.update(user).where(user.username.eq("zhang")).set(user.username,"li")
-                .set(user.password,"456").execute();
+        queryFactory.update(user).where(user.username.eq("zhang")).set(user.username, "li")
+                .set(user.password, "456").execute();
 
         System.out.println(" ==== " + name);
 
@@ -102,7 +147,7 @@ public class UserServiceImpl implements UserService {
             @Nullable
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Predicate predicate = cb.equal(root.get("username"),"zhang");
+                Predicate predicate = cb.equal(root.get("username"), "zhang");
 
                 CriteriaQuery result = query.where(predicate);
 
@@ -111,7 +156,7 @@ public class UserServiceImpl implements UserService {
         }, pageRequest);
     }
 
-    public void save(){
+    public void save() {
 //        User user = new User().setUsername("li").setPassword("123");
 //
 //        try {

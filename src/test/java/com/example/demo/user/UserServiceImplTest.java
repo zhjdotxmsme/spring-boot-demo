@@ -8,6 +8,8 @@ import com.example.demo.view.HelloController;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.hibernate.Session;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
@@ -23,6 +25,7 @@ import javax.transaction.Transactional;
  */
 public class UserServiceImplTest extends DemoApplicationTests {
 
+    private final static Logger LOG = LoggerFactory.getLogger(UserServiceImplTest.class);
 
     @Autowired
     UserService userService;
@@ -41,6 +44,19 @@ public class UserServiceImplTest extends DemoApplicationTests {
 
     @Test
     public void save() throws Exception {
+        for (int i = 6; i < 10; i++) {
+            User user = new User().setUsername("wang" + i).setPassword("123").setPasswordSalt("abcdefg");
+            User user1 = userService.createUser(user);
+            LOG.info("user is create : %s" , user.getUsername());
+        }
+    }
+
+    @Test
+    public void changePsw() throws Exception {
+        Long userId = 1L;
+        String newPassword = "654321";
+
+        userService.changePasswword(userId,newPassword);
     }
 
     @Test
