@@ -1,13 +1,12 @@
 package com.example.demo.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,10 +15,12 @@ import java.util.Set;
  * @date 2018年10月29日 10:53
  * @modified By
  */
-@Entity
+
+@javax.persistence.Entity
 @Table(name = "users")
 @Data
-public class User{
+@NoArgsConstructor
+public class User extends Entity<User> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +34,18 @@ public class User{
 
     private String passwordSalt;
 
-    @ManyToMany(targetEntity = Role.class)
-    @JoinTable(name = "user_role",
-                    joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"),
-                    inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    private String phone = "";
+
+    private String email = "";
+
+    private Integer status = 1;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender = Gender.未知性别;
+
+//    @ManyToMany(targetEntity = Role.class)
+//    @JoinTable(name = "user_role",
+//            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
+//    private Set<Role> roles = new HashSet<>();
 }

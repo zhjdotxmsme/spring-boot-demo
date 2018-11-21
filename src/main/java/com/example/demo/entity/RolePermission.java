@@ -8,7 +8,7 @@ import javax.persistence.*;
  * Created by alexzhu on 2018/11/11 1:05 .
  * No bug No pain
  */
-@Entity
+@javax.persistence.Entity
 @Table(name = "role_permission")
 @Data
 public class RolePermission {

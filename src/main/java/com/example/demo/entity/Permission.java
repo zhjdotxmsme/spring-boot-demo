@@ -12,7 +12,7 @@ import java.util.Set;
  * @date 2018年11月05日 11:21
  * @modified By
  */
-@Entity
+@javax.persistence.Entity
 @Table(name = "permission")
 @Data
 public class Permission {

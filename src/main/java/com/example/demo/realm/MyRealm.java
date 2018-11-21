@@ -33,12 +33,12 @@ public class MyRealm extends AuthorizingRealm {
         User user = userService.findByUsername(name);
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-        for (Role role : user.getRoles()) {
-            info.addRole(role.getRoleName());
+//        for (Role role : user.getRoles()) {
+//            info.addRole(role.getRoleName());
 //            for (Permission permission : role.getPermissions()) {
 //                info.addStringPermission(permission.getPermission());
 //            }
-        }
+//        }
         return info;
     }
 
@@ -54,7 +54,7 @@ public class MyRealm extends AuthorizingRealm {
             //这里返回后会报出对应异常
             return null;
         } else {
-            //这里验证authenticationToken和simpleAuthenticationInfo的信息
+            //这里验证authenticationToken和simpleAuthenticationInfo的信息 第三个参数传入用户输入的用户名。
             SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(name, user.getPassword(), getName());
             return info;
         }

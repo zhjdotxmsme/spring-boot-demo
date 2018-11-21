@@ -10,7 +10,7 @@ import javax.persistence.*;
  * @date 2018年11月01日 10:01
  * @modified By
  */
-@Entity
+@javax.persistence.Entity
 @Table(name = "user_role")
 @Data
 public class UserRole {

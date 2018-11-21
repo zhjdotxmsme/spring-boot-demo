@@ -10,6 +10,8 @@ import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,12 +52,14 @@ public class UserServiceImpl implements UserService {
     private String name;
 
     @Override
-    public User createUser(User u) {
-        //todo 入参的校验
+    public User createUser(User user) {
+        //todo 数据校验
+        String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
+        String cryptPsw = new Md5Hash(user.getPassword(), salt, 3).toString();
 
-        User user;
-        user = userDao.save(u);
-        return user;
+        user.setPassword(cryptPsw);
+        user.setPasswordSalt(salt);
+        return userDao.save(user);
     }
 
     @Override
@@ -89,11 +93,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changePasswword(Long userId, String newPassword) {
+        //todo 数据校验
         Optional<User> userOptional = userDao.findById(userId);
-        userOptional.ifPresent(user -> {
-            user.setPassword(newPassword);
-            userDao.save(user);
-        });
+        User user = userOptional.orElseThrow(() -> new RuntimeException("查不到用户"));
+        System.out.println("原来的密码：" + user.getPassword());
+        System.out.println("原来的密码salt：" + user.getPasswordSalt());
+        String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
+        String cryptPsw = new Md5Hash(newPassword, salt, 3).toString();
+        user.setPassword(cryptPsw);
+
+        System.out.println("新的密码：" + salt);
+        System.out.println("新的密码salt：" + cryptPsw);
+
+        System.out.println("修改密码成功！");
     }
 
     @Override
@@ -138,8 +150,8 @@ public class UserServiceImpl implements UserService {
 //        System.out.println(" === " + resutl.getPassword());
         Session session = entityManager.unwrap(Session.class);
         JPAQueryFactory queryFactory = new JPAQueryFactory(session);
-        queryFactory.update(user).where(user.username.eq("zhang")).set(user.username, "li")
-                .set(user.password, "456").execute();
+        queryFactory.update(user).where(user.username.eq("zhang")).set(user.username,"li")
+                .set(user.password,"456").execute();
 
         System.out.println(" ==== " + name);
 
@@ -147,25 +159,13 @@ public class UserServiceImpl implements UserService {
             @Nullable
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Predicate predicate = cb.equal(root.get("username"), "zhang");
+                Predicate predicate = cb.equal(root.get("username"),"zhang");
 
                 CriteriaQuery result = query.where(predicate);
 
                 return predicate;
             }
         }, pageRequest);
-    }
-
-    public void save() {
-//        User user = new User().setUsername("li").setPassword("123");
-//
-//        try {
-//            Object o = userDao.save(user).get();
-//            System.out.println("====" + o);
-//        } catch (InterruptedException | ExecutionException e) {
-//            System.out.println(e.getMessage());
-//        }
-
     }
 
     public void setName(String name) {
