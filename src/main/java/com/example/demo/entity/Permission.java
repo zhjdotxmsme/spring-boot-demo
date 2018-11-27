@@ -1,10 +1,6 @@
 package com.example.demo.entity;
 
-import lombok.Data;
-
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Table;
 
 /**
  * @author hongjin.zhu
@@ -14,18 +10,31 @@ import java.util.Set;
  */
 @javax.persistence.Entity
 @Table(name = "permission")
-@Data
-public class Permission {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "permission_id")
-    private Long permissionId;
+public class Permission extends Entity<Permission> {
 
     private String permission;
 
-    @ManyToMany(targetEntity = Role.class)
-    @JoinTable(name = "role_permission",
-                joinColumns = @JoinColumn(name = "permission_id",referencedColumnName = "permission_id"),
-                inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+//    @ManyToMany(targetEntity = Role.class)
+//    @JoinTable(name = "role_permission",
+//                joinColumns = @JoinColumn(name = "id",referencedColumnName = "permission_id"),
+//                inverseJoinColumns = @JoinColumn(name = "id",referencedColumnName = "role_id"))
+//    private Set<Role> roles = new HashSet<>();
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public Permission setPermission(String permission) {
+        this.permission = permission;
+        return this;
+    }
+
+//    public Set<Role> getUserRoles() {
+//        return roles;
+//    }
+//
+//    public Permission setUserRoles(Set<Role> roles) {
+//        this.roles = roles;
+//        return this;
+//    }
 }

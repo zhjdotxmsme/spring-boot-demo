@@ -1,7 +1,5 @@
 package com.example.demo.realm;
 
-import com.example.demo.entity.Permission;
-import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import org.apache.shiro.authc.AuthenticationException;
@@ -33,7 +31,7 @@ public class MyRealm extends AuthorizingRealm {
         User user = userService.findByUsername(name);
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-//        for (Role role : user.getRoles()) {
+//        for (Role role : user.getUserRoles()) {
 //            info.addRole(role.getRoleName());
 //            for (Permission permission : role.getPermissions()) {
 //                info.addStringPermission(permission.getPermission());

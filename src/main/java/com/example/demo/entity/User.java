@@ -17,15 +17,10 @@ import java.util.Set;
  */
 
 @javax.persistence.Entity
-@Table(name = "users")
+@Table(name = "user")
 @Data
 @NoArgsConstructor
 public class User extends Entity<User> implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long userId;
 
     @NotBlank(message = "name 不能为空！！！！！！！！！！！")
     private String username;
@@ -43,9 +38,70 @@ public class User extends Entity<User> implements Serializable {
     @Enumerated(EnumType.STRING)
     private Gender gender = Gender.未知性别;
 
-//    @ManyToMany(targetEntity = Role.class)
-//    @JoinTable(name = "user_role",
-//            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
-//    private Set<Role> roles = new HashSet<>();
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private Set<UserRole> roles = new HashSet<>();
+
+    public String getUsername() {
+        return username;
+    }
+
+    public User setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public User setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public String getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public User setPasswordSalt(String passwordSalt) {
+        this.passwordSalt = passwordSalt;
+        return this;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public User setPhone(String phone) {
+        this.phone = phone;
+        return this;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public User setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public User setStatus(Integer status) {
+        this.status = status;
+        return this;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public User setGender(Gender gender) {
+        this.gender = gender;
+        return this;
+    }
 }

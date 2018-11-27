@@ -2,8 +2,12 @@ package com.example.demo.user;
 
 import com.example.demo.DemoApplicationTests;
 import com.example.demo.entity.QUser;
+import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
+import com.example.demo.entity.UserRole;
+import com.example.demo.service.RoleService;
 import com.example.demo.service.UserService;
+import com.example.demo.service.user.UserRoleServiceImpl;
 import com.example.demo.view.HelloController;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.hibernate.Session;
@@ -31,6 +35,12 @@ public class UserServiceImplTest extends DemoApplicationTests {
     UserService userService;
 
     @Autowired
+    RoleService roleService;
+
+    @Autowired
+    UserRoleServiceImpl userRoleService;
+
+    @Autowired
     HelloController helloController;
 
     @PersistenceContext
@@ -44,10 +54,20 @@ public class UserServiceImplTest extends DemoApplicationTests {
 
     @Test
     public void save() throws Exception {
-        for (int i = 6; i < 10; i++) {
-            User user = new User().setUsername("wang" + i).setPassword("123").setPasswordSalt("abcdefg");
-            User user1 = userService.createUser(user);
-            LOG.info("user is create : %s" , user.getUsername());
+        for (int i = 0; i < 6; i++) {
+            Role role = new Role().setRoleName(" leader singer ").setCreateUserId(1L).setRemark(" just imagination ");
+            User user1 = new User().setUsername("cranberry" + i).setPassword("123456");
+            User user2 = new User().setUsername(" eagle band " + i).setPassword("987654");
+            UserRole userRole1 = new UserRole().setRole(role).setUser(user1);
+            UserRole userRole2 = new UserRole().setRole(role).setUser(user2);
+
+            userService.createUser(user1);
+            userService.createUser(user2);
+            roleService.createRole(role);
+            userRoleService.createUserRole(userRole1);
+            userRoleService.createUserRole(userRole2);
+
+            LOG.info(" do do do ");
         }
     }
 

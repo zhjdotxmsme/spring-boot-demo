@@ -11,26 +11,18 @@ import java.util.Date;
 @MappedSuperclass
 public class Entity<T> {
 
-//    private Logger Log;
-//
-//    @SuppressWarnings("rawtypes")
-//    private Entity() {
-//        Class<T> entityClass =
-//                (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-//        Log = LoggerFactory.getLogger(entityClass.getClass());
-//    }
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @Version
     @Column(name = "version")
     private Integer version;
 
-    @Column(name = "gmt_created")
+    @Column(name = "gmt_create")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date gmtCreated;
+    private Date gmtCreate;
 
     @Column(name = "gmt_modified")
     @Temporal(TemporalType.TIMESTAMP)
@@ -38,7 +30,7 @@ public class Entity<T> {
 
     @PostPersist
     void afterPersist() {
-        gmtCreated = new Date(System.currentTimeMillis());
+        gmtCreate = new Date(System.currentTimeMillis());
         gmtModified = new Date(System.currentTimeMillis());
         System.out.println(" ==== persist entity ===" + getClass());
     }
@@ -49,14 +41,14 @@ public class Entity<T> {
         System.out.println(" ==== eneity is be update:" + getClass());
     }
 
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public Entity setId(Long id) {
-//        this.id = id;
-//        return this;
-//    }
+    public Long getId() {
+        return id;
+    }
+
+    public Entity setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public Integer getVersion() {
         return version;
@@ -68,11 +60,11 @@ public class Entity<T> {
     }
 
     public Date getGmtCreated() {
-        return gmtCreated;
+        return gmtCreate;
     }
 
-    public Entity setGmtCreated(Date gmtCreated) {
-        this.gmtCreated = gmtCreated;
+    public Entity setGmtCreated(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
         return this;
     }
 

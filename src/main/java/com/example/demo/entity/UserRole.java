@@ -1,8 +1,8 @@
 package com.example.demo.entity;
 
-import lombok.Data;
-
-import javax.persistence.*;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * @author hongjin.zhu
@@ -12,17 +12,31 @@ import javax.persistence.*;
  */
 @javax.persistence.Entity
 @Table(name = "user_role")
-@Data
-public class UserRole {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class UserRole extends Entity<UserRole> {
 
-    @Column(name = "user_id")
-//    @JoinColumn(name = "userId")
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "role_id")
-//    @JoinColumn(name = "roleId")
-    private Long roleId;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    public User getUser() {
+        return user;
+    }
+
+    public UserRole setUser(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public UserRole setRole(Role role) {
+        this.role = role;
+        return this;
+    }
 }

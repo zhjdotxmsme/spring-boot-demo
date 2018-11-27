@@ -9,7 +9,8 @@ import com.example.demo.entity.Role;
  * @modified By
  */
 public interface RoleService {
-    Role createRole(Role role);
+    void createRole(Role role);
+
     void deleteRole(Long roleId);
 
     /**
