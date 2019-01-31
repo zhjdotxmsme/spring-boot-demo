@@ -25,9 +25,22 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 0
 
 logging:
   file: "logs/spring-boot.log"
+  config: classpath:logback.xml
 server:
   port: 10252
 
@@ -49,4 +62,3 @@ management:
       show-details: always
     shutdown:
       enabled: true
-

@@ -5,6 +5,16 @@ import com.example.demo.entity.QUser;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -12,6 +22,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +32,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author hongjin.zhu
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     public User createUser(User user) {
         //todo 数据校验
         String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
-        String cryptPsw = new Md5Hash(user.getPassword(), salt, 3).toString();
+        String cryptPsw = new Sha256Hash(user.getPassword(), salt, 3).toString();
 
         user.setPassword(cryptPsw);
         user.setPasswordSalt(salt);

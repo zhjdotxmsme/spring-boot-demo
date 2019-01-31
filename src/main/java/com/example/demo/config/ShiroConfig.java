@@ -1,15 +1,15 @@
 package com.example.demo.config;
 
 import com.example.demo.realm.MyRealm;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author hongjin.zhu
@@ -28,6 +28,8 @@ public class ShiroConfig {
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(myRealm());
+        SessionManager sessionManager = securityManager.getSessionManager();
+
         return securityManager;
     }
 
